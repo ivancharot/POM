@@ -1,10 +1,11 @@
 const IndexPage = require('../pageobjects/pages/index.page');
 
 describe('Carousel Index page test', () => {
+    before('Open the page', async () => {
+        await IndexPage.open();
+    });
+
     describe('Arrow controls test', () => {
-        before('Open the page', async () => {
-            await IndexPage.open();
-        });
 
         it('move to the next and previous slides by clicking on the arrow in the carousel', 
     async () => {
