@@ -14,7 +14,7 @@ class IndexPage extends Page {
     get crslDotControls() {
         return $$('//*[@id="carousel-example-generic"]/ol/li')
     }
-
+    
     get crslImages() {
         return $$('//*[@class="slide-image"]')
     }
@@ -22,7 +22,6 @@ class IndexPage extends Page {
     get findOutMoreBTN() {
         return $('#button-find-out-more')
     }
-
 
     async currentCrslImage() {
         const imgState = await this.crslImages.map((el) => el.isDisplayed())
@@ -46,7 +45,7 @@ class IndexPage extends Page {
     
     async arrowClick(arrow) {
         let current = await this.currentCrslImage();
-        await arrow == 'left' ? this.clickLeftArrow() :this.clickRightArrow();
+        await arrow == '<' ? this.clickLeftArrow() :this.clickRightArrow();
         await browser.waitUntil(async function (){
             return (await current.isDisplayed()===false)
            });
