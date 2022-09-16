@@ -1,6 +1,6 @@
 const IndexPage = require('../pageobjects/pages/index.page');
 
-describe('Carousel Index page test', () => {
+describe('Index page test', () => {
     before('Open the page', async () => {
         await IndexPage.open();
     });
@@ -60,15 +60,47 @@ describe('Carousel Index page test', () => {
         it('Verify that if the user clicks on dot then the user should be navigated to the relevant slide image', async () => {
             const activeDotsList = await IndexPage.dotIsActiveList()
             const dotIndex = await activeDotsList.findIndex(el => el==false)
-            const current = await IndexPage.currentCrslImage()
+            const startImage = await IndexPage.currentCrslImage()
             await IndexPage.crslDotControls[dotIndex].click()
             await browser.waitUntil(async function (){
-                return (await current.isDisplayed()===false)
+                return (await startImage.isDisplayed()===false)
                });
             const imageIndex = await IndexPage.crslImages.map(el => el.isDisplayed()).findIndex(el => el==true)
             expect(await dotIndex).toEqual(await imageIndex)
         })
     })
+
+    describe('menu btns test', () => {
+        it('Verify if btns are clickable', async () => {
+            expect(await IndexPage.menuItems.filter(el => el.isClickable()).length)
+                    .toEqual(await IndexPage.menuItems.length)
+        })
+
+        it('"Our Products" btn test', async () => {
+            await IndexPage.clickMenuButton('Our Products')
+            const btnUrl = await browser.getUrl()
+            expect(btnUrl).toEqual('https://webdriveruniversity.com/Page-Object-Model/products.html')
+            await browser.back();
+        })
+
+        it('"Contact Us" btn test', async () => {
+            await IndexPage.clickMenuButton('Contact Us')
+            const btnUrl = await browser.getUrl()
+            expect(btnUrl).toEqual('https://webdriveruniversity.com/Contact-Us/contactus.html')
+            await browser.pause(500);
+            await browser.back();
+        })
+
+        it('"Home" btn test', async () => {
+            await IndexPage.clickMenuButton('Home')
+            const btnUrl = await browser.getUrl()
+            expect(btnUrl).toEqual('https://webdriveruniversity.com/Page-Object-Model/index.html')
+            await browser.pause(500);
+        })
+    })
+
+
+
     }
 )
 

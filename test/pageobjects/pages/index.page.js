@@ -23,6 +23,13 @@ class IndexPage extends Page {
         return $('#button-find-out-more')
     }
 
+    get modalDialogElement() {
+        return $('//*[@id="myModal"]')
+    }
+
+
+
+
     async currentCrslImage() {
         const imgState = await this.crslImages.map((el) => el.isDisplayed())
         return await this.crslImages[imgState.findIndex(el=>el===true)]
@@ -55,6 +62,12 @@ class IndexPage extends Page {
 
     async dotIsActiveList() {
         return await this.crslDotControls.map(el => el.getAttribute('class')).map(el => !!el)
+    }
+
+    async clickMenuButton(btnName) {
+        const menuBtnsList = await this.menuItems.map(el => el.getText())
+        const btnIndex = await menuBtnsList.findIndex(el => el ===btnName)
+        return this.menuItems[btnIndex].click()
     }
 
     open() {
