@@ -23,7 +23,7 @@ describe('Carousel Index page test', () => {
             const imageBefore = await IndexPage.currentImageSrc()
             await IndexPage.arrowClick('>');
             const imageAfter = await IndexPage.currentImageSrc()
-            expect(await imageAfter).toEqual(await imageSrcArray[imageSrcArray.findIndex(el=>el==imageBefore)+1])
+            expect(await imageAfter).toEqual(await imageSrcArray[imageSrcArray.findIndex(el=>el==imageBefore)+1]) //need to be fixed
             });
 
         it('Verify that if the user clicks on the “<” icon button then the previous image slide should be displayed', 
@@ -32,7 +32,7 @@ describe('Carousel Index page test', () => {
             const imageBefore = await IndexPage.currentImageSrc()
             await IndexPage.arrowClick('<');
             const imageAfter = await IndexPage.currentImageSrc()
-            expect(await imageAfter).toEqual(await imageSrcArray[imageSrcArray.findIndex(el=>el==imageBefore)-1])
+            expect(await imageAfter).toEqual(await imageSrcArray[imageSrcArray.findIndex(el=>el==imageBefore)-1]) //need to be fixed
             });
 
         it('Verify if the user is able to move slides in loop way', async () => {
@@ -45,6 +45,30 @@ describe('Carousel Index page test', () => {
             expect(await imageBefore).toEqual(await imageAfter)
                 })
             })
+    
+    describe('Dot indicators/controls test', () => {
+
+        it('Verify if dots are clickable', async () => {
+            const clickable = await IndexPage.crslDotControls.filter(el => el.isClickable())
+            expect(await clickable.length).toEqual(await IndexPage.crslDotControls.length)
+        })
+
+        it('Verify if sum of dots is the same like the sum of images', async () => {
+            expect(await IndexPage.crslDotControls.length).toEqual(await IndexPage.crslImages.length)
+        })
+
+        it('Verify that if the user clicks on dot then the user should be navigated to the relevant slide image', async () => {
+            const activeDotsList = await IndexPage.dotIsActiveList()
+            const dotIndex = await activeDotsList.findIndex(el => el==false)
+            const current = await IndexPage.currentCrslImage()
+            await IndexPage.crslDotControls[dotIndex].click()
+            await browser.waitUntil(async function (){
+                return (await current.isDisplayed()===false)
+               });
+            const imageIndex = await IndexPage.crslImages.map(el => el.isDisplayed()).findIndex(el => el==true)
+            expect(await dotIndex).toEqual(await imageIndex)
+        })
+    })
     }
 )
 

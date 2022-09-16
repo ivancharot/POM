@@ -53,6 +53,10 @@ class IndexPage extends Page {
         return await current.getAttribute('src');
     }
 
+    async dotIsActiveList() {
+        return await this.crslDotControls.map(el => el.getAttribute('class')).map(el => !!el)
+    }
+
     open() {
         return super.open('')
     }
