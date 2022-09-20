@@ -24,9 +24,12 @@ class IndexPage extends Page {
     }
 
     get modalDialogElement() {
-        return $('//*[@id="myModal"]')
+        return $('//*[@role="dialog"]')
     }
 
+    get modalDialogBtns() {
+        return $$('//*[@id="myModal"]//button')
+    }
 
 
 
@@ -68,6 +71,25 @@ class IndexPage extends Page {
         const menuBtnsList = await this.menuItems.map(el => el.getText())
         const btnIndex = await menuBtnsList.findIndex(el => el ===btnName)
         return this.menuItems[btnIndex].click()
+    }
+
+    async clickModalDialogBtn(btnName) {
+        const modalBtnsNameList = await this.modalDialogBtns.map(el => el.getText())
+        const btnIndex = await modalBtnsNameList.findIndex(el => el === btnName)
+        const modalDialog = await this.modalDialogElement
+        await this.modalDialogBtns[btnIndex].click()
+        await browser.waitUntil(async function(){
+            return (await modalDialog.isDisplayed()===false)
+        })
+
+    }
+
+    async clickFindOutMoreBtn() {
+        const modalDialog = await this.modalDialogElement
+        await this.findOutMoreBTN.click()
+        await browser.waitUntil(async function(){
+            return (await modalDialog.isDisplayed())
+        })
     }
 
     open() {

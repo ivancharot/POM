@@ -99,6 +99,43 @@ describe('Index page test', () => {
         })
     })
 
+    describe('Btn "FindOutMore" and modal dialog test', () => {
+        it('Verify if "FindOutMore" button is clickable', async () => {
+            expect(await IndexPage.findOutMoreBTN.isClickable()).toEqual(true)
+        })
+
+        it('Verify if clicking on "FindOutMore" button calls the modal dialog', async () => {
+            const beforeClick = await IndexPage.modalDialogElement.isDisplayed()
+            await IndexPage.clickFindOutMoreBtn()
+            const afterClick = await IndexPage.modalDialogElement.isDisplayed()
+            expect(await beforeClick).toEqual(false)
+            expect(await afterClick).toEqual(true)
+        })
+
+        it('Verify if dialog buttons are clickable', async () => {
+            const modalBtnsClickability = await IndexPage.modalDialogBtns.map( el =>
+                el.isClickable()).filter(el => el===true)
+            expect(await modalBtnsClickability)
+            .toHaveLength(await IndexPage.modalDialogBtns.length)
+        })
+
+        it('Verify if close button closes modal dialog', async () => {
+            const dialogStateBeforeClick = await IndexPage.modalDialogElement.isDisplayed()
+            await IndexPage.clickModalDialogBtn('Close')
+            const dialogStateAfterClick = await IndexPage.modalDialogElement.isDisplayed()
+            expect(dialogStateBeforeClick).toEqual(true)
+            expect(dialogStateAfterClick).toEqual(false)
+        })
+
+        it('Verify if × button closes modal dialog', async () => {
+            await IndexPage.clickFindOutMoreBtn()
+            const dialogStateBeforeClick = await IndexPage.modalDialogElement.isDisplayed()
+            await IndexPage.clickModalDialogBtn('×')
+            const dialogStateAfterClick = await IndexPage.modalDialogElement.isDisplayed()
+            expect(dialogStateBeforeClick).toEqual(true)
+            expect(dialogStateAfterClick).toEqual(false)
+        })
+    })  
 
 
     }
